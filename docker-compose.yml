@@ -1,0 +1,36 @@
+services:
+  eureka-server:
+    build: ./eureka-server
+    ports: ["8761:8761"]
+  auth-service:
+    build: ./auth-service
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: GrandVistaSuperSecretKey-ChangeThis-AtLeast32Chars!
+  room-service:
+    build: ./room-service
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: GrandVistaSuperSecretKey-ChangeThis-AtLeast32Chars!
+  booking-service:
+    build: ./booking-service
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: GrandVistaSuperSecretKey-ChangeThis-AtLeast32Chars!
+  payment-service:
+    build: ./payment-service
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: GrandVistaSuperSecretKey-ChangeThis-AtLeast32Chars!
+  api-gateway:
+    build: ./api-gateway
+    ports: ["8080:8080"]
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - eureka-server
+      - auth-service
+      - room-service
+      - booking-service
+      - payment-service
